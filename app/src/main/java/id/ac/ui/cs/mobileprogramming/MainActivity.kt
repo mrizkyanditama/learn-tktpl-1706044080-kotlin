@@ -89,10 +89,11 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
+    external fun convertToGHzJNI(input: Double): Double
 
     private fun packageWifiItem(scanResult: ScanResult, info: String = ""): WifiModel {
         return WifiModel(
-                frequency = scanResult.frequency.toString(),
+                frequency = convertToGHzJNI(scanResult.frequency.toDouble()).toString(),
                 info = info,
                 ssid = scanResult.SSID,
                 bssid = scanResult.BSSID,
@@ -154,6 +155,13 @@ class MainActivity : AppCompatActivity() {
                     updateDataAndView()
                 }
             }
+        }
+    }
+
+    companion object {
+        // Used to load the 'native-lib' library on application startup.
+        init {
+            System.loadLibrary("native-lib")
         }
     }
 }
